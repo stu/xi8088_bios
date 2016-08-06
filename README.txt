@@ -10,6 +10,11 @@ bios128k-xtide-2.0.bin	- BIOS image for Xi 8088 - Version 2.0 with XT-IDE
 bios128k-1.0.bin	- BIOS image for Sergey's XT - Version 1.0
 bios128k-xtide-1.0.bin	- BIOS image for Sergey's XT - Version 1.0 with XT-IDE
 
+Changes - Version 0.8.1
+-----------------------
+- Fix BIOS extension ROM scan procedure. Previously in some cases it was
+  failing to initialize more than one BIOS extension ROM.
+
 Changes - Version 0.8
 ---------------------
 - Add serial port (INT 14h) support

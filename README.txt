@@ -15,6 +15,15 @@ TODO:
 - Debug mouse issue with Intel 8242
 - Debug issues with Microsoft and Logitech mouse drivers
 
+Changes - Version 0.9.1 - WORK IN PROGRESS
+-----------------------
+- Fixed serial port count in Bios Data Area
+- Fixed printer port count in Bios Data Area
+- Added extra puase in RTC to try and fix 0xFF read.
+- Updated XTIDE bios
+- Included the bootmenu version of the bios now too
+
+
 Changes - Version 0.9.0
 -----------------------
 - No updates except of BIOS date and version

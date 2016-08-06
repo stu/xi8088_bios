@@ -228,6 +228,23 @@ detect_serial:
 					; uart_base = uart_ier_reg - 1
 	mov	word [equip_serial+bx],dx ; store port address to the BIOS
 					; data area
+					
+	;; SGEO serial port fix
+	push ax
+	push cx
+	
+	mov ax,[equipment_list]
+	mov cl,9
+	shr ax,cl
+	and al,0x7
+	inc ax
+	shl ax,cl	
+	and word [equipment_list],0xF1FF
+	or [equipment_list],ax
+	
+	pop cx
+	pop ax
+					
 	mov	ax,dx
 	call	print_hex
 	jmp	.next

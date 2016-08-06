@@ -102,6 +102,20 @@ detect_parallel:
 	jne	.no_port		; no port at this address
 	mov	word [equip_parallel+bx],dx ; store port address to the BIOS
 					; data area
+					
+	;; SGEO parallel port fix
+	push ax
+	push cx
+	mov ax,[equipment_list]
+	mov cl,14
+	shr ax,cl
+	and al,0x3
+	inc ax
+	shl ax,cl
+	and word [equipment_list],0x3FFF
+	or [equipment_list],ax
+	pop cx
+	pop ax
 	jmp	.next
 
 .no_port:

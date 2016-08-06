@@ -82,6 +82,9 @@ rtc_read:
 	out	rtc_addr_reg,al
 	jmp	$+2
 	jmp	$+2
+	;; SGEO increased pause here, seems to fix my FF byte issue...
+	jmp	$+2
+	jmp	$+2
 	in	al,rtc_data_reg
 	sti
 	ret

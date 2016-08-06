@@ -22,8 +22,8 @@
 ;
 ;=========================================================================
 
-%define DATE		'05/28/14'	; BIOS release date MM/DD/YY
-%define VERSION		'0.9.0'		; BIOS version
+%define DATE		'08/05/16'	; BIOS release date MM/DD/YY
+%define VERSION		'0.9.1'		; BIOS version
 %define	START		8000h		; BIOS starts at offset 8000h
 
 %define AT_COMPAT			; AT-compatible system, two PICs

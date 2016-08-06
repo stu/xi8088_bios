@@ -18,7 +18,7 @@
 
 SOURCES=bios.asm macro.inc atkbd.inc config.inc errno.inc floppy1.inc floppy2.inc kbc.inc misc.inc printer1.inc printer2.inc ps2aux.inc scancode.inc serial1.inc serial2.inc sound.inc time1.inc time2.inc video.inc cpu.inc messages.inc inttrace.inc rtc.inc fnt00-7F.inc fnt80-FF.inc
 
-all: $(SOURCES) bios128k-1.0.bin bios128k-xtide-1.0.bin bios128k-2.0.bin bios128k-xtide-2.0.bin
+all: $(SOURCES) bios128k-1.0.bin bios128k-xtide-1.0.bin bios128k-2.0.bin bios128k-xtide-2.0.bin bios128k-xtidel-2.0.bin
 
 bios128k-1.0.bin: bios.bin ff-64k.bin ff-32k.bin
 	cat ff-64k.bin ff-32k.bin bios.bin > bios128k-1.0.bin
@@ -31,6 +31,9 @@ bios128k-2.0.bin: bios.bin ff-64k.bin ff-32k.bin
 
 bios128k-xtide-2.0.bin: bios.bin ff-64k.bin ff-24k.bin ide_xt.bin
 	cat ide_xt.bin ff-24k.bin bios.bin ff-64k.bin > bios128k-xtide-2.0.bin
+
+bios128k-xtidel-2.0.bin: bios.bin ff-64k.bin ff-20k.bin ide_xt.bin
+	cat ide_xtl.bin ff-20k.bin bios.bin ff-64k.bin > bios128k-xtidel-2.0.bin
 
 bios.bin: $(SOURCES)
 bios.bin: $(SOURCES)

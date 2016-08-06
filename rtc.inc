@@ -4,8 +4,8 @@
 ;
 ; Compiles with NASM 2.07, might work with other versions
 ;
-; Copyright (C) 2011 Sergey Kiselev.
-; Provided for hobbyist use on the Sergey's XT board.
+; Copyright (C) 2011 - 2012 Sergey Kiselev.
+; Provided for hobbyist use on the Xi 8088 board.
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -120,19 +120,21 @@ rtc_init:
 	push	si
 	push	di
 	mov	al,cmos_control_a	; select control A register
-	mov	ah,26h
-	call	rtc_write
+	mov	ah,26h			; turn on oscillator and time keeping
+					; set SQW frequency to 1.024 KHz
+	call	rtc_write		; write control register A
 
 	mov	al,cmos_control_b
 	mov	ah,cmos_24hours		; 24 hours, BCD format, DSE disabled
-	call	rtc_write		; write control B register
+					; interrupts disabled
+	call	rtc_write		; write control register B
 
 	mov	al,cmos_control_c
-	call	rtc_read		; read control C register - reset
+	call	rtc_read		; read control register C - reset
 					; interrupt flags
 
 	mov	al,cmos_control_d
-	call	rtc_read		; read control D register
+	call	rtc_read		; read control register D
 	test	al,cmos_vrt
 	jnz	.1			; RTC battery is OK
 	mov	si,msg_rtc_bad
@@ -268,6 +270,9 @@ rtc_init:
 	and	al,~(equip_video|equip_mouse)   ; these are autodetected
 	and	byte [equipment_list],equip_video|equip_mouse
 	or	byte [equipment_list],al
+
+	mov	al,e_rtc_init_ok	; RTC initialzied successfully
+	out	post_reg,al
 
 	pop	di
 	pop	si

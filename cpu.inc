@@ -4,8 +4,8 @@
 ;
 ; Compiles with NASM 2.07, might work with other versions
 ;
-; Copyright (C) 2011 Sergey Kiselev.
-; Provided for hobbyist use on the Sergey's XT board.
+; Copyright (C) 2011 - 2012 Sergey Kiselev.
+; Provided for hobbyist use on the Xi 8088 board.
 ;
 ; This program is free software: you can redistribute it and/or modify
 ; it under the terms of the GNU General Public License as published by
@@ -105,6 +105,9 @@ detect_cpu:
 	call	print
 
 .exit:
+	mov	al,e_cpu_detect_ok	; CPU detection finished
+	out	post_reg,al
+
 	pop	si
 	pop	ax
 	ret
@@ -164,6 +167,10 @@ detect_fpu:
 
 .exit:
 	mov	word [test_word],cx	; restore initial value of test_word
+
+	mov	al,e_fpu_detect_ok	; FPU detection finished
+	out	post_reg,al
+
 	pop	si
 	pop	cx
 	pop	ax

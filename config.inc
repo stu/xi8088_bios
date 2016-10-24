@@ -22,7 +22,7 @@
 ;
 ;=========================================================================
 
-%define DATE		'08/05/16'	; BIOS release date MM/DD/YY
+%define DATE		'10/24/16'	; BIOS release date MM/DD/YY
 %define VERSION		'0.9.1'		; BIOS version
 %define	START		8000h		; BIOS starts at offset 8000h
 

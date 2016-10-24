@@ -7,8 +7,10 @@ BIOS Images
 bios.bin		- BIOS image for use with xiflash utility
 bios128k-2.0.bin	- BIOS image for Xi 8088 - Version 2.0
 bios128k-xtide-2.0.bin	- BIOS image for Xi 8088 - Version 2.0 with XT-IDE
+bios128k-xtidel-2.0.bin	- BIOS image for Xi 8088 - Version 2.0 with XT-IDE boot menu
 bios128k-1.0.bin	- BIOS image for Sergey's XT - Version 1.0
 bios128k-xtide-1.0.bin	- BIOS image for Sergey's XT - Version 1.0 with XT-IDE
+
 
 TODO:
 - Investigate 'FF' displayed in the year
@@ -22,7 +24,7 @@ Changes - Version 0.9.1 - WORK IN PROGRESS
 - Added extra puase in RTC to try and fix 0xFF read.
 - Updated XTIDE bios
 - Included the bootmenu version of the bios now too
-
+- Added message in cpu to show Turbo On or Off.
 
 Changes - Version 0.9.0
 -----------------------

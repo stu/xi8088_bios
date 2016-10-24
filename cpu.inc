@@ -105,6 +105,19 @@ detect_cpu:
 	call	print
 
 .exit:
+	;; SGEO do turbo test.
+	mov si, msg_turbo
+	call print
+	
+	mov si, msg_turbo_on
+	
+	in al, 0x61
+	test al,0x4
+	jnz .exit1
+	mov si, msg_turbo_off
+.exit1:
+	call print
+	
 	mov	al,e_cpu_detect_ok	; CPU detection finished
 	out	post_reg,al
 
@@ -140,8 +153,7 @@ detect_fpu:
 	push	ax
 	push	cx
 	push	si
-	mov	si,msg_fpu
-	call	print
+		
 	fninit				; initialize coprocessor
 	mov	cx,3
 .wait:
@@ -155,14 +167,13 @@ detect_fpu:
 	jne	.no_fpu			;   after finit
 
 .fpu:
-	mov	si,msg_fpu_present
+	mov	si, msg_fpu_present
 	call	print
 	or	word [equipment_list],equip_fpu ; update equipment word
 	jmp	.exit
 
 .no_fpu:
-
-	mov	si,msg_absent
+	mov si, msg_no_fpu
 	call	print
 
 .exit:

@@ -108,17 +108,17 @@ equip_video	equ	0000000000110000b	; video type bit mask
 equip_color	equ	0000000000100000b	; color 80x25 (mode 3)
 equip_mono	equ	0000000000110000b	; mono 80x25 (mode 7)
 equip_floppy2	equ	0000000001000000b	; 2nd floppy drive installed
-;			|||||||||||||||`-- floppy drives installed
-;			||||||||||||||`-- FPU installed
-;			|||||||||||||`-- PS/2 mouse installed
-;			||||||||||||`-- reserved
-;			||||||||||`--- initial video mode
-;			||||||||`---- number of floppy drives - 1
-;			|||||||`---- O = DMA installed
-;			||||`------ number of serial ports
-;			|||`------ game adapter installed
-;			||`------ internal modem?!
-;			`------- number of parallel ports
+		;			|||||||||||||||`-- floppy drives installed
+		;			||||||||||||||`-- FPU installed
+		;			|||||||||||||`-- PS/2 mouse installed
+		;			||||||||||||`-- reserved
+		;			||||||||||`--- initial video mode
+		;			||||||||`---- number of floppy drives - 1
+		;			|||||||`---- O = DMA installed
+		;			||||`------ number of serial ports
+		;			|||`------ game adapter installed
+		;			||`------ internal modem?!
+		;			`------- number of parallel ports
 
 post_flags	equ	12h	; byte - post flags
 post_setup	equ	01h	; run NVRAM setup
@@ -671,7 +671,7 @@ reserve_ebda:
 	mov	si,msg_ebda
 	call	print
 	call	print_dec
-	mov	si,msg_kib
+	mov	si,msg_kibx
 	call	print
 	pop	si
 .no_mouse:
@@ -1312,7 +1312,7 @@ low_ram_ok:
 
 ;-------------------------------------------------------------------------
 ; look for video BIOS, initialize it if present
-
+	
 	mov	dx,0C000h
 	mov	bx,0C800h
 	call	extension_scan
@@ -1330,16 +1330,26 @@ low_ram_ok:
 	jmp	.video_initialized
 
 .no_video_bios:
-	mov	ah,byte [equipment_list] ; get equipment - low byte
-	and	ah,equip_video		; get video adapter type
-	mov	al,07h			; monochrome 80x25 mode
-	cmp	ah,equip_mono		; monochrome?
+	mov	ah,byte [equipment_list] 	; get equipment - low byte
+	and	ah,equip_video				; get video adapter type
+	
+	mov	al,07h						; monochrome 80x25 mode
+	cmp	ah,equip_mono				; monochrome?
 	jz	.set_mode
-	mov	al,03h			; color 80x25 mode
+	
+	mov	al,03h						; color 80x25 mode
 
 .set_mode:
-	mov	ah,00h			; INT 10, AH=00 - Set video mode
+	mov	ah,00h						; INT 10, AH=00 - Set video mode
+
+	;; SGEO - try and do a video fix..
+	push ax
 	int	10h
+	;; 100ms
+	mov cx, 0x43 * 100
+	call delay_15us
+	pop ax
+	int 0x10
 
 .video_initialized:
 
@@ -1383,7 +1393,7 @@ low_ram_ok:
 	mov	si,msg_ram_total
 	call	print
 	call	print_dec		; print RAM size
-	mov	si,msg_kib
+	mov	si,msg_kibx
 	call	print
 
 	call	reserve_ebda		; reserve EBDA if needed

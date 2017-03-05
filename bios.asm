@@ -86,7 +86,13 @@ iochk_status	equ	40h	; ~IOCHK status - 1 = ~IOCHK NMI signalled
 post_reg	equ	80h	; POST status output port
 pic2_reg0	equ	0A0h
 pic2_reg1	equ	0A1h
+
+%ifdef TANDY_ID
+unused_reg	equ 0xEE	; dont use 0xC0 for Tandy Sound card
+%else
 unused_reg	equ	0C0h	; used for hardware detection and I/O delays
+%endif
+
 cga_mode_reg	equ	3D8h
 mda_mode_reg	equ	3B8h
 
@@ -476,7 +482,7 @@ atoi:
 	mul	bx			; DX:AX = AX * 10
 	mov	ch,0
 	add	ax,cx			; AX = AX + CX
-	
+
 	jmp	.atoi_loop
 
 .exit:
@@ -854,7 +860,7 @@ ram_test_block:
 
 .fail:
 	stc				; test failed, set CF
-	
+
 .exit:
 	pop	es
 	pop	ds
@@ -939,7 +945,7 @@ detect_rom_ext:
 
 	ret
 
-;=========================================================================	
+;=========================================================================
 ; interrupt_table - offsets only (BIOS segment is always 0F000h)
 ;-------------------------------------------------------------------------
 interrupt_table:
@@ -992,9 +998,12 @@ interrupt_table2:
 	dw	int_ignore2		; INT 77 - IRQ15
 %endif ; AT_COMPAT
 
+
+%include	"tandy.inc"
+
 ;=========================================================================
 ; cold_start, warm_start - BIOS POST (Power on Self Test) starts here
-;-------------------------------------------------------------------------	
+;-------------------------------------------------------------------------
 	setloc	0E05Bh		; POST Entry Point
 cold_start:
 	mov	ax,biosdseg
@@ -1102,7 +1111,7 @@ cpu_ok:
 
 ;-------------------------------------------------------------------------
 ; Initialize DMAC (8237)
- 
+
  	out	0Dh,al			; DMA Master Clear register - reset DMA
  	mov	al,40h			; single mode, verify, channel 0
  	out	dmac_mode_reg,al	; DMA Mode register
@@ -1312,7 +1321,7 @@ low_ram_ok:
 
 ;-------------------------------------------------------------------------
 ; look for video BIOS, initialize it if present
-	
+
 	mov	dx,0C000h
 	mov	bx,0C800h
 	call	extension_scan
@@ -1325,18 +1334,18 @@ low_ram_ok:
 	mov	ds,ax
 	mov	al,e_video_init_ok
 	out	post_reg,al
-; set video bits to 00 - EGA or later (Video adapter with BIOS)		
+; set video bits to 00 - EGA or later (Video adapter with BIOS)
 	and	word [equipment_list],~equip_video
 	jmp	.video_initialized
 
 .no_video_bios:
 	mov	ah,byte [equipment_list] 	; get equipment - low byte
 	and	ah,equip_video				; get video adapter type
-	
+
 	mov	al,07h						; monochrome 80x25 mode
 	cmp	ah,equip_mono				; monochrome?
 	jz	.set_mode
-	
+
 	mov	al,03h						; color 80x25 mode
 
 .set_mode:
@@ -1674,7 +1683,7 @@ int_05:
 	int	10h			; returns cursor position in DX
 	push	dx			; save original position / DX in stack
 
-	
+
 	mov	ah,0Dh			; move to the next line
 	call	.print_char
 	jnz	.error
@@ -1736,7 +1745,7 @@ int_05:
 	mov	byte [prt_scrn_flags],prt_scrn_fail
 					; signal failure
 	jmp	.restore_cursor
-	
+
 
 .print_char:
 	push	dx
@@ -1759,9 +1768,14 @@ start:
 	db	20h
 
 	setloc	0FFFEh			; System Model
+%ifdef TANDY_ID
+	db 0xFF					;; for tandy id
+%else
 %ifdef AT_COMPAT
 	db	0fch			; system is an IBM AT compatible
 %else
 	db	0feh			; system is an IBM PC/XT compatible
 %endif ; AT_COMPAT
+%endif
 	db	0ffh
+

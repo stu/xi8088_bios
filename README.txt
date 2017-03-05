@@ -19,6 +19,10 @@ TODO:
 
 Changes - Version 0.9.1 - WORK IN PROGRESS
 -----------------------
+- Added a Tandy config option which replaces;
+	- unused reg from 0xC0 to 0xEE for Tandy 1000 sound card
+	- Pulls in a Phoenix text string that is used as an ID marker
+	- Sets system id byte to 0xFF
 - Fixed serial port count in Bios Data Area
 - Fixed printer port count in Bios Data Area
 - Added extra puase in RTC to try and fix 0xFF read.
@@ -70,7 +74,7 @@ Changes - Version 0.7d
 
 - POST
 	- Reset IOCHK trigger, disable turbo mode
-	
+
 
 Changes - Version 0.7c
 ----------------------

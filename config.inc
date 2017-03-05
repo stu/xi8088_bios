@@ -22,9 +22,10 @@
 ;
 ;=========================================================================
 
-%define DATE		'10/24/16'	; BIOS release date MM/DD/YY
+%define DATE		'12/12/16'	; BIOS release date MM/DD/YY
 %define VERSION		'0.9.1'		; BIOS version
 %define	START		8000h		; BIOS starts at offset 8000h
+
 
 %define AT_COMPAT			; AT-compatible system, two PICs
 %define PS2_MOUSE			; Enable PS/2 auxiliary device support
@@ -35,3 +36,7 @@
 %define EBDA_SIZE	1		; 1KB reserved for EBDA
 					; EBDA is required for PS/2 aux support
 %define SLOW_FLOPPY			; turn off turbo during floppy I/O
+
+
+;; %define TANDY_ID		; setup for minial Tandy 1000 id
+
